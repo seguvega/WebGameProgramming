@@ -13,6 +13,9 @@ public class PlayerInput : MonoBehaviour
     [SerializeField]private float MaxSpeed = 10.0f;
     [SerializeField]private float Gravity = -10.0f;
     [SerializeField]private float RotationSpeed = 40.0f;
+    private float CameraXRotation;
+
+
 
     private Vector3 Velocity;
 
@@ -26,6 +29,8 @@ public class PlayerInput : MonoBehaviour
             Controller = gameObject.AddComponent<CharacterController>();
         }
         PlayerCamera = GetComponentInChildren<Camera>();
+        Cursor.lockState = CursorLockMode.Locked;//lock the cursor to the scene
+        Cursor.visible = false;
 
     }
 
@@ -40,6 +45,10 @@ public class PlayerInput : MonoBehaviour
     
         //Rotation of the player
         transform.Rotate(Vector3.up, look.x * Time.deltaTime * RotationSpeed);
-        PlayerCamera.transform.localRotation *= Quaternion.Euler(-look.y * Time.deltaTime * RotationSpeed, 0, 0);
+
+        //Rotate the camera
+        CameraXRotation += RotationSpeed* look.y * Time.deltaTime;
+        CameraXRotation = Mathf.Clamp(CameraXRotation, -90, 90);
+        PlayerCamera.gameObject.transform.localEulerAngles = new Vector3(-CameraXRotation, 0, 0);//PlayerCamera.gameObject.transform.localRotation = Quaternion.Euler(-CameraXRotation, 0, 0);
     }
 }
