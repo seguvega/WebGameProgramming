@@ -51,4 +51,9 @@ public class PlayerInput : MonoBehaviour
         CameraXRotation = Mathf.Clamp(CameraXRotation, -90, 90);
         PlayerCamera.gameObject.transform.localEulerAngles = new Vector3(-CameraXRotation, 0, 0);//PlayerCamera.gameObject.transform.localRotation = Quaternion.Euler(-CameraXRotation, 0, 0);
     }
+
+    public void MouseSensibility(float value)
+    {
+        RotationSpeed = value;
+    }
 }
