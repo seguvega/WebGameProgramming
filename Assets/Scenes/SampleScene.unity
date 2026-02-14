@@ -694,7 +694,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.7, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 802992628}
   m_Father: {fileID: 1926733156}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
@@ -859,7 +860,7 @@ GameObject:
   - component: {fileID: 397810680}
   m_Layer: 0
   m_Name: NPC
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1404,6 +1405,37 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: c59fcdfd48a364940a0bcb8016c8fb4c, type: 2}
   m_BuildHeightMesh: 0
+--- !u!1 &802992627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 802992628}
+  m_Layer: 0
+  m_Name: ProjectileTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &802992628
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802992627}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.026450312, y: -0, z: -0, w: 0.9996502}
+  m_LocalPosition: {x: 0, y: 0.006, z: 0.191}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 330585546}
+  m_LocalEulerAnglesHint: {x: -3.031, y: 0, z: 0}
 --- !u!1 &831589019
 GameObject:
   m_ObjectHideFlags: 0
@@ -3048,6 +3080,7 @@ GameObject:
   - component: {fileID: 1926733157}
   - component: {fileID: 1926733159}
   - component: {fileID: 1926733160}
+  - component: {fileID: 1926733161}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -3227,6 +3260,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuInput
   MenuUI: {fileID: 2029195709}
   MouseSensibilitySlider: {fileID: 678341841}
+--- !u!114 &1926733161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1926733152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69fb9b1554a773240bac5ee2f168a48d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerShooter
+  Bullet: {fileID: 0}
+  BulletSpawn: {fileID: 0}
+  BulletForce: 0
 --- !u!1 &1955112840
 GameObject:
   m_ObjectHideFlags: 0
