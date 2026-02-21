@@ -28,7 +28,31 @@ public class NPCMovement : MonoBehaviour
         {
             index = Random.Range(0, Waypoints.Length);
             agent.destination = Destination = Waypoints[index].transform.position;
-
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(!other.CompareTag("Player"))
+        {
+            return;
+        }
+        Destination = other.gameObject.transform.position;
+        agent.destination = Destination;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(!other.CompareTag("Player"))
+        {
+            return;
+        }
+        index = Random.Range(0, Waypoints.Length);
+        agent.destination = Destination = Waypoints[index].transform.position;
     }
 }

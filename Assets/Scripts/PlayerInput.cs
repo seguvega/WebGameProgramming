@@ -8,12 +8,16 @@ public class PlayerInput : MonoBehaviour
     private InputAction Move;    
     private InputAction Look;
 
+    private InputAction Jump;
+
     [SerializeField] private CharacterController Controller;
     [SerializeField] private Camera PlayerCamera;
     [SerializeField]private float MaxSpeed = 10.0f;
     [SerializeField]private float Gravity = -10.0f;
     [SerializeField]private float RotationSpeed = 40.0f;
     private float CameraXRotation;
+
+    [SerializeField] private AudioController AudioController;
 
 
 
@@ -23,6 +27,8 @@ public class PlayerInput : MonoBehaviour
     {
         Move =  InputSystem.actions.FindAction("Player/Move");
         Look = InputSystem.actions.FindAction("Player/Look");
+        Jump = InputSystem.actions.FindAction("Player/Jump");
+        Jump.started += JumpAction;//delegate subscribing.
         Controller = GetComponent<CharacterController>();
         if(Controller == null)
         {
@@ -55,5 +61,15 @@ public class PlayerInput : MonoBehaviour
     public void MouseSensibility(float value)
     {
         RotationSpeed = value;
+    }
+
+    private void JumpAction(InputAction.CallbackContext Context)
+    {
+        AudioController.PlayJumpSound();
+        Velocity.y = 5.0f;
+    }
+    private void OnDisable()
+    {
+        Jump.started -=JumpAction;//Unsubscribe for the delegate.
     }
 }
