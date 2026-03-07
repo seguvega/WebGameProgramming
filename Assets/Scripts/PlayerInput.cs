@@ -16,11 +16,6 @@ public class PlayerInput : MonoBehaviour
     [SerializeField]private float Gravity = -10.0f;
     [SerializeField]private float RotationSpeed = 40.0f;
     private float CameraXRotation;
-
-    [SerializeField] private AudioController AudioController;
-
-
-
     private Vector3 Velocity;
 
     void Start()
@@ -65,7 +60,7 @@ public class PlayerInput : MonoBehaviour
 
     private void JumpAction(InputAction.CallbackContext Context)
     {
-        AudioController.PlayJumpSound();
+        AudioController.Instance.PlayJumpSound();
         Velocity.y = 5.0f;
     }
     private void OnDisable()
