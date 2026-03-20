@@ -1,9 +1,8 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
-public class BulletObjectPool : PersistentSinglenton<BulletObjectPool>
+public class BulletObjectPool : PersistentSingleton<BulletObjectPool>
 {
     [SerializeField] private Bullet BulletPrefab;
     private Queue<Bullet> Pool = new Queue<Bullet>();

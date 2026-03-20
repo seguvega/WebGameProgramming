@@ -1,41 +1,38 @@
-using UnityEditor.PackageManager;
 using UnityEngine;
 
-public abstract class PersistentSinglenton<T> : MonoBehaviour where T : Component
+public abstract class PersistentSingleton<T> : MonoBehaviour where T : Component
 {
     protected static T instance;
     public static T Instance
     {
-        get
-        {
+        get 
+        { 
             if (instance == null)
             {
                 instance = FindAnyObjectByType<T>();
-                if(instance == null)
+                if (instance == null)
                 {
-                    GameObject NewObj = new GameObject(typeof(T).Name + "Generated");
-                    instance = NewObj.AddComponent<T>();               
+                    GameObject go = new GameObject(typeof(T).Name + "Generated");
+                    instance = go.AddComponent<T>();
                 }
             }
             return instance;
         }
     }
-
     protected virtual void Awake()
     {
-        InitSingleton();
+        InitiSingleton();
     }
-
-    protected void InitSingleton()
+    protected virtual void InitiSingleton()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this as T;
             DontDestroyOnLoad(gameObject);
         }
         else
         {
-            if(instance != this)
+            if (instance != this)
             {
                 Destroy(gameObject);
             }

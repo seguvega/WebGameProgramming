@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class AudioController : PersistentSinglenton<AudioController>
+public class AudioController : PersistentSingleton<AudioController>
 {
     [SerializeField] private AudioClip BackgroundMusic;
     [SerializeField] private AudioClip JumpSound;
