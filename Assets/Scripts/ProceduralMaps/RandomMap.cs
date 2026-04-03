@@ -89,11 +89,11 @@ public class RandomMap : MonoBehaviour
         Debug.Log($"GenerateTileOnPerslin ({noiseValue})");
         switch (noiseValue)
         {
-            case <= 0.2f: return prefabTilesList[0]; // Water
-            case <= 0.4f: return prefabTilesList[1]; // Grass
-            case <= 0.6f: return prefabTilesList[2]; // Road
-            case <= 0.8f: return prefabTilesList[3]; // Ground
-            case <= 1f:   return prefabTilesList[4]; // Lava
+            case <= 0.1f: return prefabTilesList[0]; // Water
+            case <= 0.2f: return prefabTilesList[1]; // Grass
+            case <= 0.4f: return prefabTilesList[2]; // Road
+            case <= 0.6f: return prefabTilesList[3]; // Ground
+            case <= 0.7f: return prefabTilesList[4]; // Lava ---> 0.7f to 1f will be Lava
             default: return prefabTilesList[1]; // Default will be Grass
         }
     }
