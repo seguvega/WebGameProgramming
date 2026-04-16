@@ -1,70 +1,77 @@
+using KBCore.Refs;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
-[RequireComponent(typeof(CharacterController))]//Require CharacterController component
+[RequireComponent(typeof(CharacterController))]
 public class PlayerInput : MonoBehaviour
 {
-    private InputAction Move;    
-    private InputAction Look;
-
-    private InputAction Jump;
-
-    [SerializeField] private CharacterController Controller;
-    [SerializeField] private Camera PlayerCamera;
-    [SerializeField]private float MaxSpeed = 10.0f;
-    [SerializeField]private float Gravity = -10.0f;
-    [SerializeField]private float RotationSpeed = 40.0f;
-    private float CameraXRotation;
-    private Vector3 Velocity;
+    private InputAction move;
+    private InputAction look;
+    private InputAction jump;
+    [SerializeField] private float maxSpeed = 10.0f;
+    [SerializeField] private float gravity = -30.0f;
+    private Vector3 velocity;
+    [SerializeField] private float rotationSpeed = 4.0f;
+    [SerializeField] private float mouseSensY = 5.0f;
+    [SerializeField] private float mobileScale = 10f;
+    private float camXRotation;
+    [SerializeField, Self] private CharacterController controller;
+    [SerializeField, Child] private Camera cam;
+    private void OnValidate()
+    {
+        this.ValidateRefs();
+    }
 
     void Start()
     {
-        Move =  InputSystem.actions.FindAction("Player/Move");
-        Look = InputSystem.actions.FindAction("Player/Look");
-        Jump = InputSystem.actions.FindAction("Player/Jump");
-        Jump.started += JumpAction;//delegate subscribing.
-        Controller = GetComponent<CharacterController>();
-        if(Controller == null)
-        {
-            Controller = gameObject.AddComponent<CharacterController>();
-        }
-        PlayerCamera = GetComponentInChildren<Camera>();
-        Cursor.lockState = CursorLockMode.Locked;//lock the cursor to the scene
+        move = InputSystem.actions.FindAction("Player/Move");
+        look = InputSystem.actions.FindAction("Player/Look");
+        jump = InputSystem.actions.FindAction("Player/Jump");
+        jump.started += Jump;
+#if !UNITY_ANDROID
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Vector2 movement = Move.ReadValue<Vector2>();
-        Vector2 look = Look.ReadValue<Vector2>();
-        //Move of the player
-        Velocity = new Vector3(movement.x, Gravity, movement.y);
-        Controller.Move(transform.TransformDirection(Velocity) * MaxSpeed * Time.deltaTime);
-    
-        //Rotation of the player
-        transform.Rotate(Vector3.up, look.x * Time.deltaTime * RotationSpeed);
-
-        //Rotate the camera
-        CameraXRotation += RotationSpeed* look.y * Time.deltaTime;
-        CameraXRotation = Mathf.Clamp(CameraXRotation, -90, 90);
-        PlayerCamera.gameObject.transform.localEulerAngles = new Vector3(-CameraXRotation, 0, 0);//PlayerCamera.gameObject.transform.localRotation = Quaternion.Euler(-CameraXRotation, 0, 0);
-    }
-
-    public void MouseSensibility(float value)
-    {
-        RotationSpeed = value;
-    }
-
-    private void JumpAction(InputAction.CallbackContext Context)
-    {
-        AudioController.Instance.PlayJumpSound();
-        Velocity.y = 5.0f;
+#endif
     }
     private void OnDisable()
     {
-        Jump.started -=JumpAction;//Unsubscribe for the delegate.
+        jump.started -= Jump;
     }
+
+    private void Jump(InputAction.CallbackContext context)
+    {
+        AudioController.Instance.PlayJumpSFX();
+        EventChannelManager.Instance.voidEvent.RaiseEvent();
+    }
+
+    void Update()
+    {
+        Vector2 readMove = move.ReadValue<Vector2>();
+        Vector2 readLook = look.ReadValue<Vector2>();// (0,0)
+        // Movement of the player
+        Vector3 movement = transform.right * readMove.x + transform.forward * readMove.y;
+        velocity.y += gravity * Time.deltaTime;
+        movement *= maxSpeed * Time.deltaTime;
+        movement += velocity;
+        controller.Move(movement);
+
+#if UNITY_ANDROID
+        transform.Rotate(Vector3.up, readLook.x * rotationSpeed * mobileScale * Time.deltaTime);
+        camXRotation += mouseSensY * readLook.y * Time.deltaTime * rotationSpeed * -1;
+#else
+        transform.Rotate(Vector3.up, readLook.x * rotationSpeed * Time.deltaTime);
+        camXRotation += mouseSensY * readLook.y * Time.deltaTime * -1;
+#endif
+
+        camXRotation = Mathf.Clamp(camXRotation, -80f, 50f);
+        cam.gameObject.transform.localRotation = Quaternion.Euler(camXRotation, 0, 0);
+    }
+
+	public void ChangeMouseSensibility(float value)
+	{
+		Debug.Log($"Value changed - {value}");
+		mouseSensY = value;
+		rotationSpeed = value;
+	}
 }
